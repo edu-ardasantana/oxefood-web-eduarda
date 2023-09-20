@@ -7,9 +7,9 @@ import { Link, useLocation } from "react-router-dom";
 import MenuSistema from '../../MenuSistema';
 
 const options = [
-    { key: "pe", text: "PE", value: "Pernambuco" },
-    { key: "sp", text: "SP", value: "São Paulo" },
-    { key: "rj", text: "RJ", value: "Rio de Janeiro" },
+    { key: "pe", text: "PE", value: "PE" },
+    { key: "sp", text: "SP", value: "SP" },
+    { key: "rj", text: "RJ", value: "RJ" },
 ]
 
 export default function FormEntregador() {
@@ -284,7 +284,9 @@ export default function FormEntregador() {
                                 options={options}
                                 placeholder="Selecione"
                                 value={enderecoUf}
-                                onChange={e => setEnderecoUf(e.target.value)}
+                                onChange={(e,{value}) =>{
+                                    setEnderecoUf(value)
+                                }}
                             />
 
                             <Form.Input

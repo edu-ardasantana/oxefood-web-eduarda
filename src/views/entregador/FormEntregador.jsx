@@ -62,8 +62,10 @@ export default function FormEntregador() {
             return ''
         }
 
-        let arrayData = dataParam.split('-');
-        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+        // let arrayData = dataParam.split('-');
+        // return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+
+        return dataParam[2] + '-' + dataParam[1] + '-' + dataParam[0];
 
 
     }
@@ -113,7 +115,7 @@ export default function FormEntregador() {
                     {idEntregador === undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                     }
-                    {idEntregador != undefined &&
+                    {idEntregador !== undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                     }
 

@@ -41,8 +41,10 @@ export default function FormCliente() {
             return ''
         }
 
-        let arrayData = dataParam.split('-');
-        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+        // let arrayData = dataParam.split('-');
+        // return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+
+        return dataParam[2] + '-' + dataParam[1] + '-' + dataParam[0];
 
 
     }
@@ -82,7 +84,7 @@ export default function FormCliente() {
                     {idCliente === undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                     }
-                    {idCliente != undefined &&
+                    {idCliente !== undefined &&
                         <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                     }
 

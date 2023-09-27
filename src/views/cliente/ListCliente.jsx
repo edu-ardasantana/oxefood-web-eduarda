@@ -95,6 +95,7 @@ export default function ListCliente() {
                                     <Table.HeaderCell>Data de Nascimento</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Celular</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Fixo</Table.HeaderCell>
+                                    <Table.HeaderCell>Endereços</Table.HeaderCell>
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
@@ -109,6 +110,20 @@ export default function ListCliente() {
                                         <Table.Cell>{formatarData(cliente.dataNascimento)}</Table.Cell>
                                         <Table.Cell>{cliente.foneCelular}</Table.Cell>
                                         <Table.Cell>{cliente.foneFixo}</Table.Cell>
+                                        <Table.Cell textAlign='center'>
+
+                                            <Button
+                                                inverted
+                                                circular
+                                                color='blue'
+                                                title='Clique aqui para ver os endereços deste cliente'
+                                                icon
+                                            // onClick={e => confirmaRemover(cliente.id)}
+                                            >
+                                                <Icon name='eye' />
+                                            </Button>
+                                            
+                                        </Table.Cell>
                                         <Table.Cell textAlign='center'>
 
                                             <Button
@@ -130,6 +145,8 @@ export default function ListCliente() {
                                                 onClick={e => confirmaRemover(cliente.id)}>
                                                 <Icon name='trash' />
                                             </Button>
+
+
 
                                         </Table.Cell>
                                     </Table.Row>

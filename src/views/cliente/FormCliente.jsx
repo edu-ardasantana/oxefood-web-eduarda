@@ -17,6 +17,8 @@ export default function FormCliente() {
     const [foneCelular, setFoneCelular] = useState();
     const [foneFixo, setFoneFixo] = useState();
 
+
+
     useEffect(() => {
 
         if (state != null && state.id != null) {
@@ -69,6 +71,17 @@ export default function FormCliente() {
                 .then((response) => { console.log('Cliente cadastrado com sucesso.') })
                 .catch((error) => { console.log('Erro ao incluir o cliente.') })
         }
+    }
+
+    function addEndereco() {
+        return (
+            <Form>
+                <Form.Input>
+                    fluid
+                    label='Nome'
+                </Form.Input>
+            </Form>
+        )
     }
 
     return (
@@ -160,6 +173,21 @@ export default function FormCliente() {
 
                             </Form.Group>
 
+                            <div style={{ marginTop: '4%' }}>
+                                <Button
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='blue'
+                                    onClick={() => addEndereco()}
+                                >
+                                    <Icon name='plus' />
+                                    Adicionar endereço
+                                </Button>
+
+                            </div>
+
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
@@ -181,7 +209,7 @@ export default function FormCliente() {
                                 circular
                                 icon
                                 labelPosition='left'
-                                color='blue'
+                                color='green'
                                 floated='right'
                                 onClick={() => salvar()}
                             >

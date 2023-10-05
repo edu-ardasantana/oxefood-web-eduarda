@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container, Icon, Divider, Form, Button } from "semantic-ui-react";
 import { Link, useLocation } from "react-router-dom";
-
 import MenuSistema from '../../MenuSistema';
+import {mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormCategoriaProduto() {
 
@@ -30,11 +30,32 @@ export default function FormCategoriaProduto() {
 
         if (idCategoriaProduto != null) { //Alteração
             axios.put("http://localhost:8082/api/categoriaProduto/" + idCategoriaProduto, categoriaProdutoRequest)
-                .then((response) => { console.log('Categoria de produto alterado com sucesso.') })
+                .then((response) => {
+                    notifySuccess('Categoria de produto alterada com sucesso.')
+                    console.log('Categoria de produto alterada com sucesso.')
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                    } else {
+                        notifyError(mensagemErro)
+                    }
+                    console.log('Erro ao alterar uma categoria de produto.')
+                })
         } else { //Cadastro
             axios.post("http://localhost:8082/api/categoriaProduto", categoriaProdutoRequest)
-                .then((response) => { console.log('Categoria de produto cadastrada com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir a categoria de produto.') })
+                .then((response) => {
+                    notifySuccess('Categoria de produto cadastrado com sucesso.')
+                    console.log('Categoria de produto cadastrada com sucesso.')
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                    } else {
+                        notifyError(mensagemErro)
+                    }
+                    console.log('Erro ao incluir a categoria de produto.')
+                })
         }
     }
 

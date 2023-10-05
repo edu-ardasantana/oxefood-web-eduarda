@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import { Link, useLocation } from "react-router-dom";
-
 import MenuSistema from '../../MenuSistema';
+import {mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 const options = [
     { key: "pe", text: "PE", value: "PE" },
@@ -93,12 +93,32 @@ export default function FormEntregador() {
 
         if (idEntregador != null) { //Alteração:
             axios.put("http://localhost:8082/api/entregador/" + idEntregador, entregadorRequest)
-                .then((response) => { console.log('Entregador alterado com sucesso.') })
-                .catch((error) => { console.log('Erro ao alter um entregador.') })
+                .then((response) => { 
+                    notifySuccess('Entregador alterado com sucesso.')
+                    console.log('Entregador alterado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }
+                    console.log('Erro ao alterar um entregador.') 
+                })
         } else { //Cadastro:
             axios.post("http://localhost:8082/api/entregador", entregadorRequest)
-                .then((response) => { console.log('Entregador cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o entregador.') })
+                .then((response) => { 
+                    notifySuccess('Entregador cadastrado com sucesso.')
+                    console.log('Entregador cadastrado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        } 
+                    console.log('Erro ao incluir o entregador.') 
+                })
         }
 
     }

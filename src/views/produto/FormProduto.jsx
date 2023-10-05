@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container, Icon, Divider, Form, Button } from "semantic-ui-react";
 import { Link, useLocation } from "react-router-dom";
-
 import MenuSistema from '../../MenuSistema';
+import {mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormProduto() {
 
@@ -60,12 +60,32 @@ export default function FormProduto() {
 
         if (idProduto != null) { //Alteração:
             axios.put("http://localhost:8082/api/produto/" + idProduto, produtoRequest)
-                .then((response) => { console.log('Produto alterado com sucesso.') })
-                .catch((error) => { console.log('Erro ao alterar um produto.') })
+                .then((response) => { 
+                    notifySuccess('Produto alterado com sucesso.')
+                    console.log('Produto alterado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }
+                    console.log('Erro ao alterar um produto.') 
+                })
         } else { //Cadastro:
             axios.post("http://localhost:8082/api/produto", produtoRequest)
-                .then((response) => { console.log('Produto cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o produto.') })
+                .then((response) => { 
+                    notifySuccess('Produto cadastrado com sucesso.')
+                    console.log('Produto cadastrado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        } 
+                    console.log('Erro ao incluir o produto.') 
+                })
         }
 
     }

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import { Link, useLocation } from "react-router-dom";
-
 import MenuSistema from '../../MenuSistema';
+import {mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormCliente() {
 
@@ -64,12 +64,32 @@ export default function FormCliente() {
 
         if (idCliente != null) { //Alteração:
             axios.put("http://localhost:8082/api/cliente/" + idCliente, clienteRequest)
-                .then((response) => { console.log('Cliente alterado com sucesso.') })
-                .catch((error) => { console.log('Erro ao alter um cliente.') })
+                .then((response) => { 
+                    notifySuccess('Cliente alterado com sucesso.')
+                    console.log('Cliente alterado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }  
+                    console.log('Erro ao alterar um cliente.') 
+                })
         } else { //Cadastro:
             axios.post("http://localhost:8082/api/cliente", clienteRequest)
-                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o cliente.') })
+                .then((response) => { 
+                    notifySuccess('Cliente cadastrado com sucesso.')
+                    console.log('Cliente cadastrado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }                         
+                    console.log('Erro ao incluir o cliente.')
+                })
         }
     }
 

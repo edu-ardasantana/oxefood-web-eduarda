@@ -31,10 +31,15 @@ export default function ListEntregador() {
             return ''
         }
 
+        let dia = dataParam[2] < 10 ? "0" + dataParam[2] : dataParam[2]
+        let mes = dataParam[1] < 10 ? "0" + dataParam[1] : dataParam[1]
+        let ano = dataParam[0]
+        return  dia + '/' + mes + '/' + ano;
+
         // let arrayData = dataParam.split('-');
         // return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
 
-        return dataParam[2] + '-' + dataParam[1] + '-' + dataParam[0];
+        // return dataParam[2] + '-' + dataParam[1] + '-' + dataParam[0];
 
     }
 

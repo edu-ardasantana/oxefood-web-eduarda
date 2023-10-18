@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import { Link, useLocation } from "react-router-dom";
-
 import MenuSistema from '../../MenuSistema';
+import {mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormCliente() {
 
@@ -16,6 +16,8 @@ export default function FormCliente() {
     const [dataNascimento, setDataNascimento] = useState();
     const [foneCelular, setFoneCelular] = useState();
     const [foneFixo, setFoneFixo] = useState();
+
+
 
     useEffect(() => {
 
@@ -67,13 +69,44 @@ export default function FormCliente() {
 
         if (idCliente != null) { //Alteração:
             axios.put("http://localhost:8082/api/cliente/" + idCliente, clienteRequest)
-                .then((response) => { console.log('Cliente alterado com sucesso.') })
-                .catch((error) => { console.log('Erro ao alter um cliente.') })
+                .then((response) => { 
+                    notifySuccess('Cliente alterado com sucesso.')
+                    console.log('Cliente alterado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }  
+                    console.log('Erro ao alterar um cliente.') 
+                })
         } else { //Cadastro:
             axios.post("http://localhost:8082/api/cliente", clienteRequest)
-                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
-                .catch((error) => { console.log('Erro ao incluir o cliente.') })
+                .then((response) => { 
+                    notifySuccess('Cliente cadastrado com sucesso.')
+                    console.log('Cliente cadastrado com sucesso.') 
+                })
+                .catch((error) => { 
+                    if (error.response) {
+                        notifyError(error.response.data.errors[0].defaultMessage)
+                        } else {
+                        notifyError(mensagemErro)
+                        }                         
+                    console.log('Erro ao incluir o cliente.')
+                })
         }
+    }
+
+    function addEndereco() {
+        return (
+            <Form>
+                <Form.Input>
+                    fluid
+                    label='Nome'
+                </Form.Input>
+            </Form>
+        )
     }
 
     return (
@@ -165,6 +198,21 @@ export default function FormCliente() {
 
                             </Form.Group>
 
+                            <div style={{ marginTop: '4%' }}>
+                                <Button
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='blue'
+                                    onClick={() => addEndereco()}
+                                >
+                                    <Icon name='plus' />
+                                    Adicionar endereço
+                                </Button>
+
+                            </div>
+
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
@@ -186,7 +234,7 @@ export default function FormCliente() {
                                 circular
                                 icon
                                 labelPosition='left'
-                                color='blue'
+                                color='green'
                                 floated='right'
                                 onClick={() => salvar()}
                             >

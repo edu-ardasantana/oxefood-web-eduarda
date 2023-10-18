@@ -1,14 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Icon, Menu, Modal, Segment, Table } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
+import { mensagemErro, notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function ListCliente() {
 
     const [lista, setLista] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
+    const [menuFiltro, setMenuFiltro] = useState();
+    const [cpf, setCpf] = useState();
 
 
     useEffect(() => {
@@ -52,7 +55,7 @@ export default function ListCliente() {
 
         await axios.delete('http://localhost:8082/api/cliente/' + idRemover)
             .then((response) => {
-
+                notifySuccess('Cliente removido com sucesso.')
                 console.log('Cliente removido com sucesso.')
 
                 axios.get("http://localhost:8082/api/cliente")
@@ -61,9 +64,43 @@ export default function ListCliente() {
                     })
             })
             .catch((error) => {
+                if (error.response) {
+                    notifyError(error.response.data.errors[0].defaultMessage)
+                } else {
+                    notifyError(mensagemErro)
+                }
                 console.log('Erro ao remover um cliente.')
             })
         setOpenModal(false)
+    }
+
+    function handleMenuFiltro() {
+
+        if (menuFiltro === true) {
+            setMenuFiltro(false);
+        } else {
+            setMenuFiltro(true);
+        }
+    }
+
+    function handleChangeCpf(value) {
+
+        filtrarProdutos(value, cpf);
+    }
+
+    async function filtrarProdutos(cpfParam) {
+
+        let formData = new FormData();
+
+        if (cpfParam !== undefined) {
+            setCpf(cpfParam)
+            formData.append('cpf', cpfParam);
+        }
+
+        await axios.post("http://localhost:8082/api/cliente/filtrar", formData)
+            .then((response) => {
+                setLista(response.data)
+            })
     }
 
 
@@ -79,6 +116,18 @@ export default function ListCliente() {
                     <Divider />
 
                     <div style={{ marginTop: '4%' }}>
+
+                        <Menu compact>
+                            <Menu.Item
+                                name='menuFiltro'
+                                active={menuFiltro === true}
+                                onClick={() => handleMenuFiltro()}
+                            >
+                                <Icon name='filter' />
+                                Filtrar
+                            </Menu.Item>
+                        </Menu>
+
                         <Button
                             label='Novo'
                             circular
@@ -88,6 +137,25 @@ export default function ListCliente() {
                             as={Link}
                             to='/form-cliente'
                         />
+
+                        {menuFiltro ?
+
+                            <Segment>
+                                <Form className="form-filtros">
+
+                                    <Form.Input
+                                        icon="search"
+                                        value={cpf}
+                                        onChange={e => handleChangeCpf(e.target.value)}
+                                        label='CPF do Cliente'
+                                        placeholder='Filtrar por Cpf do Cliente'
+                                        labelPosition='left'
+                                        width={4}
+                                    />
+
+                                </Form>
+                            </Segment> : ""
+                        }
 
                         <br /><br /><br />
 
@@ -100,6 +168,7 @@ export default function ListCliente() {
                                     <Table.HeaderCell>Data de Nascimento</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Celular</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Fixo</Table.HeaderCell>
+                                    <Table.HeaderCell>Endereços</Table.HeaderCell>
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
@@ -114,6 +183,20 @@ export default function ListCliente() {
                                         <Table.Cell>{formatarData(cliente.dataNascimento)}</Table.Cell>
                                         <Table.Cell>{cliente.foneCelular}</Table.Cell>
                                         <Table.Cell>{cliente.foneFixo}</Table.Cell>
+                                        <Table.Cell textAlign='center'>
+
+                                            <Button
+                                                inverted
+                                                circular
+                                                color='blue'
+                                                title='Clique aqui para ver os endereços deste cliente'
+                                                icon
+                                            // onClick={e => confirmaRemover(cliente.id)}
+                                            >
+                                                <Icon name='eye' />
+                                            </Button>
+
+                                        </Table.Cell>
                                         <Table.Cell textAlign='center'>
 
                                             <Button
@@ -135,6 +218,8 @@ export default function ListCliente() {
                                                 onClick={e => confirmaRemover(cliente.id)}>
                                                 <Icon name='trash' />
                                             </Button>
+
+
 
                                         </Table.Cell>
                                     </Table.Row>

@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
+import { logout } from './views/util/AuthenticationService';
+
 
 class MenuSistema extends React.Component {
 
@@ -20,8 +22,9 @@ class MenuSistema extends React.Component {
                         active={this.state.activeItem === 'home'}
                         onClick={this.handleItemClick}
                         as={Link}
-                        to='/'
+                        to='/home'
                     />
+
                     <Menu.Item
                         name='cliente'
                         active={this.state.activeItem === 'cliente'}
@@ -54,11 +57,11 @@ class MenuSistema extends React.Component {
                     />
 
                     <Menu.Item
-                        name='Cupom Desconto'
-                        active={this.state.activeItem === 'cupom'}
-                        onClick={this.handleItemClick}
+                        className='navbar__item--mobile'
+                        onClick={this.logout}
+                        content='Sair'
                         as={Link}
-                        to='/list-cupom'
+                        to='/'
                     />
 
                 </Menu>
